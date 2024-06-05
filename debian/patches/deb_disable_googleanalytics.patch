@@ -65,28 +65,27 @@ Forwarded: not-needed
 +</html>
 --- a/web/pandas/_templates/layout.html
 +++ b/web/pandas/_templates/layout.html
-@@ -1,14 +1,6 @@
+@@ -1,13 +1,6 @@
  <!DOCTYPE html>
  <html>
      <head>
--        <script type="text/javascript">
--            var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-27880019-2']); _gaq.push(['_trackPageview']);
--            (function() {
--                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
--                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
--                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
--            })();
+-        <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-5RE31C1RNW"></script>
+-        <script>
+-            window.dataLayer = window.dataLayer || [];
+-            function gtag(){ dataLayer.push(arguments); }
+-            gtag('js', new Date());
+-            gtag('config', 'G-5RE31C1RNW');
 -        </script>
          <title>pandas - Python Data Analysis Library</title>
          <meta charset="utf-8">
          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 --- a/doc/source/conf.py
 +++ b/doc/source/conf.py
-@@ -243,7 +243,6 @@ html_theme_options = {
-     "footer_items": ["pandas_footer", "sphinx-version"],
+@@ -240,7 +240,6 @@ html_theme_options = {
+     "footer_start": ["pandas_footer", "sphinx-version"],
      "github_url": "https://github.com/pandas-dev/pandas",
      "twitter_url": "https://twitter.com/pandas_dev",
--    "google_analytics_id": "UA-27880019-2",
+-    "analytics": {"google_analytics_id": "G-5RE31C1RNW"},
      "logo": {"image_dark": "https://pandas.pydata.org/static/img/pandas_white.svg"},
      "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
      "switcher": {

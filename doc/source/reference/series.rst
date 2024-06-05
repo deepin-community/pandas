@@ -66,7 +66,6 @@ Indexing, iteration
    Series.iloc
    Series.__iter__
    Series.items
-   Series.iteritems
    Series.keys
    Series.pop
    Series.item
@@ -148,7 +147,6 @@ Computations / descriptive stats
    Series.diff
    Series.factorize
    Series.kurt
-   Series.mad
    Series.max
    Series.mean
    Series.median
@@ -169,7 +167,6 @@ Computations / descriptive stats
    Series.unique
    Series.nunique
    Series.is_unique
-   Series.is_monotonic
    Series.is_monotonic_increasing
    Series.is_monotonic_decreasing
    Series.value_counts
@@ -250,7 +247,6 @@ Combining / comparing / joining / merging
 .. autosummary::
    :toctree: api/
 
-   Series.append
    Series.compare
    Series.update
 
@@ -269,8 +265,6 @@ Time Series-related
    Series.tz_localize
    Series.at_time
    Series.between_time
-   Series.tshift
-   Series.slice_shift
 
 Accessors
 ---------
@@ -315,13 +309,12 @@ Datetime properties
    Series.dt.second
    Series.dt.microsecond
    Series.dt.nanosecond
-   Series.dt.week
-   Series.dt.weekofyear
    Series.dt.dayofweek
    Series.dt.day_of_week
    Series.dt.weekday
    Series.dt.dayofyear
    Series.dt.day_of_year
+   Series.dt.days_in_month
    Series.dt.quarter
    Series.dt.is_month_start
    Series.dt.is_month_end
@@ -334,6 +327,8 @@ Datetime properties
    Series.dt.days_in_month
    Series.dt.tz
    Series.dt.freq
+   Series.dt.unit
+   Series.dt.normalize
 
 Datetime methods
 ^^^^^^^^^^^^^^^^
@@ -354,6 +349,7 @@ Datetime methods
    Series.dt.ceil
    Series.dt.month_name
    Series.dt.day_name
+   Series.dt.as_unit
 
 Period properties
 ^^^^^^^^^^^^^^^^^
@@ -378,6 +374,7 @@ Timedelta properties
    Series.dt.microseconds
    Series.dt.nanoseconds
    Series.dt.components
+   Series.dt.unit
 
 Timedelta methods
 ^^^^^^^^^^^^^^^^^
@@ -388,6 +385,7 @@ Timedelta methods
 
    Series.dt.to_pytimedelta
    Series.dt.total_seconds
+   Series.dt.as_unit
 
 
 .. _api.series.str:

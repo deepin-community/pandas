@@ -9,7 +9,7 @@ Forwarded: no
 
 --- a/pandas/tests/io/parser/common/test_file_buffer_url.py
 +++ b/pandas/tests/io/parser/common/test_file_buffer_url.py
-@@ -90,7 +90,7 @@ def test_nonexistent_path(all_parsers):
+@@ -83,7 +83,7 @@ def test_nonexistent_path(all_parsers):
      parser = all_parsers
      path = f"{uuid.uuid4()}.csv"
  
@@ -18,7 +18,7 @@ Forwarded: no
      with pytest.raises(FileNotFoundError, match=msg) as e:
          parser.read_csv(path)
      assert path == e.value.filename
-@@ -101,7 +101,7 @@ def test_no_permission(all_parsers):
+@@ -94,7 +94,7 @@ def test_no_permission(all_parsers):
      # GH 23784
      parser = all_parsers
  
@@ -40,7 +40,7 @@ Forwarded: no
  
 --- a/pandas/tests/io/parser/test_multi_thread.py
 +++ b/pandas/tests/io/parser/test_multi_thread.py
-@@ -4,7 +4,12 @@ parsing files for each parser defined in
+@@ -4,7 +4,13 @@ parsing files for each parser defined in
  """
  from contextlib import ExitStack
  from io import BytesIO
@@ -48,7 +48,8 @@ Forwarded: no
 +import pytest
 +try:
 +    from multiprocessing.pool import ThreadPool
-+    ThreadPool()
++    with ThreadPool():
++        pass
 +except ImportError:
 +    pytest.skip("multiprocessing not available",allow_module_level=True)
  
@@ -56,21 +57,22 @@ Forwarded: no
  import pytest
 --- a/pandas/tests/test_downstream.py
 +++ b/pandas/tests/test_downstream.py
-@@ -40,6 +40,11 @@ def df():
+@@ -33,6 +33,12 @@ def df():
  
- @pytest.mark.filterwarnings("ignore:.*64Index is deprecated:FutureWarning")
+ 
  def test_dask(df):
 +    try:
 +        from multiprocessing.pool import ThreadPool
-+        ThreadPool()
++        with ThreadPool():
++            pass
 +    except ImportError:
 +        pytest.skip("multiprocessing not available")
- 
      # dask sets "compute.use_numexpr" to False, so catch the current value
      # and ensure to reset it afterwards to avoid impacting other tests
+     olduse = pd.get_option("compute.use_numexpr")
 --- a/pandas/tests/io/test_common.py
 +++ b/pandas/tests/io/test_common.py
-@@ -196,16 +196,16 @@ Look,a snake,🐍"""
+@@ -195,16 +195,16 @@ Look,a snake,🐍"""
  
          path = os.path.join(HERE, "data", "does_not_exist." + fn_ext)
          msg1 = rf"File (b')?.+does_not_exist\.{fn_ext}'? does not exist"
@@ -91,7 +93,7 @@ Forwarded: no
          )
          msg8 = rf"Failed to open local file.+does_not_exist\.{fn_ext}"
  
-@@ -266,16 +266,16 @@ Look,a snake,🐍"""
+@@ -265,16 +265,16 @@ Look,a snake,🐍"""
          monkeypatch.setattr(icom, "_expand_user", lambda x: os.path.join("foo", x))
  
          msg1 = rf"File (b')?.+does_not_exist\.{fn_ext}'? does not exist"
@@ -112,7 +114,7 @@ Forwarded: no
          )
          msg8 = rf"Failed to open local file.+does_not_exist\.{fn_ext}"
  
-@@ -583,7 +583,7 @@ def test_bad_encdoing_errors():
+@@ -578,7 +578,7 @@ def test_bad_encdoing_errors():
  
  def test_errno_attribute():
      # GH 13872
