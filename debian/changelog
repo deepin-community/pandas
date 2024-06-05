@@ -1,26 +1,168 @@
-pandas (1.5.3+dfsg-6deepin1) unstable; urgency=medium
+pandas (2.1.4+dfsg-8) unstable; urgency=medium
 
-  * skip auto test.
+  * Re-enable the documentation.
+  * Bump Standards-Version to 4.7.0 (no changes needed).
 
- -- DESKTOP-CR5471C <zeno@DESKTOP-CR5471C.localdomain>  Wed, 22 Nov 2023 20:42:26 +0800
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 21 Apr 2024 13:50:13 +0100
 
-pandas (1.5.3+dfsg-6) unstable; urgency=medium
+pandas (2.1.4+dfsg-7) unstable; urgency=medium
 
-  * Disable numba tests on non-x86 (workaround for #1033907).
-    Using numba on such systems already warns the user.
+  * Tests: don't require 32-bit to imply time32. (Closes: #1068104)
+  * Temporarily disable the documentation (workaround for #1068349).
+  * Tests: temporarily ignore dask tests (workaround for #1068422).
 
- -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sat, 19 Aug 2023 20:51:27 +0100
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 05 Apr 2024 22:44:46 +0100
 
-pandas (1.5.3+dfsg-5) unstable; urgency=medium
+pandas (2.1.4+dfsg-6) unstable; urgency=medium
 
-  * Backport the following from experimental:
-    - Don't use numexpr for **, as it has different overflow behaviour.
-    - Tests: don't use : in numexpr variable names.
-    - Use tzdata-legacy where old-style timezone names are used.
-    - Clean up after tests.
-    - Tests: re-enable numba tests.
+  * Tests: try again to stop testing __pycache__. (Closes: #1063959)
+  * Tests: avoid FutureWarning from newer xarray. (Closes: #1066801)
+  * Drop pytables test-depends (skipping tests) on architectures
+    where it is not available. (Closes: #1064384)
 
- -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Thu, 17 Aug 2023 20:11:19 +0100
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sat, 16 Mar 2024 17:11:33 +0000
+
+pandas (2.1.4+dfsg-5) unstable; urgency=medium
+
+  * Tests: stop trying to test __pycache__. (Closes: #1063959)
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 18 Feb 2024 20:31:18 +0000
+
+pandas (2.1.4+dfsg-4) unstable; urgency=medium
+
+  * Tests: shorten ignoredtests to avoid timeout.
+  * Temporarily skip numba tests (workaround for #1033907).
+  * Update transition Breaks.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 09 Feb 2024 20:48:14 +0000
+
+pandas (2.1.4+dfsg-3) unstable; urgency=medium
+
+  * Add more transition Breaks (see #1043240).
+  * Upload to unstable. (Closes: #1056828)
+  * Tests: don't fail when (random) sum test input sums to near-0,
+    use our paths, depend on pytest-localserver, skip broken test.
+  * Docs: re-enable style.ipynb.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Thu, 01 Feb 2024 07:52:49 +0000
+
+pandas (2.1.4+dfsg-2) experimental; urgency=medium
+
+  * Fix autopkgtest syntax error.
+  * Add more transition Breaks.
+  * Tests: try again to ignore 1**NaN, NaN**0 NaNs on mips*.
+  * Tests: be compatible with current blosc2. (Closes: #1061043)
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 21 Jan 2024 18:44:54 +0000
+
+pandas (2.1.4+dfsg-1) experimental; urgency=medium
+
+  * Upstream bugfix release.  Update contributors_list and patches.
+  * Add transition Breaks.
+  * Temporarily disable style.ipynb (workaround for #1057309).
+  * Tests: ignore some DeprecationWarnings and pytables exceptions
+    to allow building in Python 3.12 (see #1055801).
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 08 Dec 2023 22:06:00 +0000
+
+pandas (2.1.3+dfsg-1) experimental; urgency=medium
+
+  * Upstream bugfix release.  Update contributors_list and patches.
+  * Re-enable numexpr for **, as upstream have decided to accept
+    its different overflow behaviour.
+  * Tests: fix autopkgtest syntax errors.
+  * Allow building on ports without pyreadstat or matplotlib.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 12 Nov 2023 21:53:27 +0000
+
+pandas (2.1.1+dfsg-2) experimental; urgency=medium
+
+  * Tests: don't fail when xlsxwriter is not installed.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 13 Oct 2023 19:43:13 +0100
+
+pandas (2.1.1+dfsg-1) experimental; urgency=medium
+
+  * Upstream bugfix release.  Update contributors_list and patches.
+  * Don't test-depend on tabulate, because our version is too old.
+  * Extend find_test_data to cover a new fixture.
+  * Tests: try again to ignore 1**NaN, NaN**0 NaNs on mips*.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Wed, 11 Oct 2023 07:40:12 +0100
+
+pandas (2.1.0+dfsg-1) experimental; urgency=medium
+
+  * New upstream release.  Update copyright, patches, dependencies.
+  * Tests: try again to ignore 1**NaN, NaN**0 NaNs on mips*,
+    ignore warnings on Itanium,
+    run with fixed locale set, skip not fail without matplotlib.
+  * Docs: fix bug in previous reproducibility patch.
+  * d/watch: Use git, as the tarball now excludes docs and test data.
+  * Don't crash in setup.py clean.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 03 Sep 2023 22:06:46 +0100
+
+pandas (2.0.3+dfsg-6) experimental; urgency=medium
+
+  * Tests: try again to ignore NaN warnings on mips*.
+  * Build on ports without sqlalchemy or working matplotlib.
+  * Reproducibility: strip object addresses,
+    disable some timestamps and random IDs.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 27 Aug 2023 11:17:44 +0100
+
+pandas (2.0.3+dfsg-5) experimental; urgency=medium
+
+  * Fix SAS I/O crash on armhf.
+  * Clean up after documentation build.
+  * Tests: ignore NaN warnings and 1**NaN, NaN**0 NaNs on mips*.
+  * Docs: use fixed seeds for reproducibility.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 25 Aug 2023 21:26:09 +0100
+
+pandas (2.0.3+dfsg-4) experimental; urgency=medium
+
+  * Ignore numba errors on most non-x86 systems (workaround
+    for #1033907).  This already warns the user.
+  * Run but ignore some previously skipped tests.
+  * Tests: revert "don't use : in numexpr variable names"
+    as that wasn't actually the problem.
+  * Tests: ignore another non-warning on armel.
+  * Fix spelling.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 20 Aug 2023 09:26:03 +0100
+
+pandas (2.0.3+dfsg-3) experimental; urgency=medium
+
+  * Don't use numexpr for **, as it has different overflow behaviour.
+  * Tests: don't use : in numexpr variable names.
+  * Fix missing import on arm*.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Thu, 17 Aug 2023 19:51:45 +0100
+
+pandas (2.0.3+dfsg-2) experimental; urgency=medium
+
+  * Clean up after tests.
+  * Don't build in bare C locale.
+  * Docs: make more plots reproducible.
+  * Remove the warning that results may be wrong on mips*,
+    as this appears to have been fixed.
+  * Tests: don't fail on warnings we added.
+  * Remove unnecessary HDF/Stata I/O warnings.
+  * Depend on system tzdata not PyPI tzdata (see #1043968).
+    Use tzdata-legacy where old-style timezone names are used.
+  * Tests: re-enable dask tests (see #1043093).
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 13 Aug 2023 21:55:15 +0100
+
+pandas (2.0.3+dfsg-1) experimental; urgency=medium
+
+  * New upstream release.  Drop/refresh patches, update dependencies.
+  * Upload to experimental, due to potential breakage.
+  * Add dask Breaks and disable tests (see #1043093).
+  * Tests: re-enable numba tests.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 06 Aug 2023 11:02:39 +0100
 
 pandas (1.5.3+dfsg-4) unstable; urgency=medium
 

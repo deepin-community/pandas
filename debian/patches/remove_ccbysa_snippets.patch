@@ -36,14 +36,14 @@ Forwarded: no - deletes some tests/examples without replacement
 +This page has been removed for copyright reasons.
 --- a/doc/source/user_guide/index.rst
 +++ b/doc/source/user_guide/index.rst
-@@ -85,4 +85,3 @@ Guides
+@@ -87,4 +87,3 @@ Guides
      scale
      sparse
      gotchas
 -    cookbook
 --- a/pandas/io/sql.py
 +++ b/pandas/io/sql.py
-@@ -1832,14 +1832,14 @@ def _get_valid_sqlite_name(name):
+@@ -2053,14 +2053,14 @@ def _get_valid_sqlite_name(name: object)
      # Replace all " with "".
      # Wrap the entire thing in double quotes.
  
@@ -63,61 +63,20 @@ Forwarded: no - deletes some tests/examples without replacement
  
  
  class SQLiteTable(SQLTable):
---- a/pandas/tests/groupby/aggregate/test_other.py
-+++ b/pandas/tests/groupby/aggregate/test_other.py
-@@ -25,37 +25,7 @@ import pandas._testing as tm
- from pandas.io.formats.printing import pprint_thing
- 
- 
--def test_agg_api():
--    # GH 6337
--    # https://stackoverflow.com/questions/21706030/pandas-groupby-agg-function-column-dtype-error
--    # different api for agg when passed custom function with mixed frame
- 
--    df = DataFrame(
--        {
--            "data1": np.random.randn(5),
--            "data2": np.random.randn(5),
--            "key1": ["a", "a", "b", "b", "a"],
--            "key2": ["one", "two", "one", "two", "one"],
--        }
--    )
--    grouped = df.groupby("key1")
--
--    def peak_to_peak(arr):
--        return arr.max() - arr.min()
--
--    with tm.assert_produces_warning(
--        FutureWarning,
--        match=r"\['key2'\] did not aggregate successfully",
--    ):
--        expected = grouped.agg([peak_to_peak])
--    expected.columns = ["data1", "data2"]
--
--    with tm.assert_produces_warning(
--        FutureWarning,
--        match=r"\['key2'\] did not aggregate successfully",
--    ):
--        result = grouped.agg(peak_to_peak)
--    tm.assert_frame_equal(result, expected)
- 
- 
- def test_agg_datetimes_mixed():
 --- a/pandas/tests/groupby/test_categorical.py
 +++ b/pandas/tests/groupby/test_categorical.py
-@@ -901,29 +901,6 @@ def test_groupby_empty_with_category():
+@@ -980,28 +980,6 @@ def test_groupby_empty_with_category():
      tm.assert_series_equal(result, expected)
  
  
 -def test_sort():
--
 -    # https://stackoverflow.com/questions/23814368/sorting-pandas-
 -    #        categorical-labels-after-groupby
 -    # This should result in a properly sorted Series so that the plot
 -    # has a sorted x axis
 -    # self.cat.groupby(['value_group'])['value_group'].count().plot(kind='bar')
 -
--    df = DataFrame({"value": np.random.randint(0, 10000, 100)})
+-    df = DataFrame({"value": np.random.default_rng(2).integers(0, 10000, 100)})
 -    labels = [f"{i} - {i+499}" for i in range(0, 10000, 500)]
 -    cat_labels = Categorical(labels, labels)
 -
@@ -132,17 +91,16 @@ Forwarded: no - deletes some tests/examples without replacement
 -    tm.assert_series_equal(res, exp)
 -
 -
- def test_sort2():
+ @pytest.mark.parametrize("ordered", [True, False])
+ def test_sort2(sort, ordered):
      # dataframe groupby sort was being ignored # GH 8868
-     df = DataFrame(
 --- a/pandas/tests/indexing/multiindex/test_setitem.py
 +++ b/pandas/tests/indexing/multiindex/test_setitem.py
-@@ -148,37 +148,7 @@ class TestMultiIndexSetItem:
+@@ -155,36 +155,6 @@ class TestMultiIndexSetItem:
          with pytest.raises(TypeError, match=msg):
              df.loc["bar"] *= 2
  
 -    def test_multiindex_setitem2(self):
- 
 -        # from SO
 -        # https://stackoverflow.com/questions/24572040/pandas-access-the-level-of-multiindex-for-inplace-operation
 -        df_orig = DataFrame.from_dict(
@@ -174,10 +132,10 @@ Forwarded: no - deletes some tests/examples without replacement
 -        tm.assert_frame_equal(df, expected)
  
      def test_multiindex_assignment(self):
- 
+         # GH3777 part 2
 --- a/pandas/tests/io/parser/common/test_common_basic.py
 +++ b/pandas/tests/io/parser/common/test_common_basic.py
-@@ -379,24 +379,6 @@ def test_trailing_delimiters(all_parsers
+@@ -349,24 +349,6 @@ def test_trailing_delimiters(all_parsers
      tm.assert_frame_equal(result, expected)
  
  
@@ -187,7 +145,7 @@ Forwarded: no - deletes some tests/examples without replacement
 -    data = '''SEARCH_TERM,ACTUAL_URL
 -"bra tv board","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
 -"tv p\xc3\xa5 hjul","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
--"SLAGBORD, \\"Bergslagen\\", IKEA:s 1700-tals series","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"'''  # noqa:E501
+-"SLAGBORD, \\"Bergslagen\\", IKEA:s 1700-tals series","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"'''  # noqa: E501
 -
 -    parser = all_parsers
 -    result = parser.read_csv(
@@ -204,7 +162,7 @@ Forwarded: no - deletes some tests/examples without replacement
      # see gh-3374, gh-6607
 --- a/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
 +++ b/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
-@@ -12,31 +12,6 @@ from pandas import (
+@@ -12,32 +12,6 @@ from pandas import (
  import pandas._testing as tm
  
  
@@ -226,7 +184,8 @@ Forwarded: no - deletes some tests/examples without replacement
 -    zed = DataFrame(events, index=["a", "b"], columns=multiind)
 -
 -    if using_copy_on_write:
--        zed["eyes"]["right"].fillna(value=555, inplace=True)
+-        with tm.raises_chained_assignment_error():
+-            zed["eyes"]["right"].fillna(value=555, inplace=True)
 -    else:
 -        msg = "A value is trying to be set on a copy of a slice from a DataFrame"
 -        with pytest.raises(SettingWithCopyError, match=msg):
@@ -238,12 +197,11 @@ Forwarded: no - deletes some tests/examples without replacement
      # 5216
 --- a/pandas/tests/indexing/test_chaining_and_caching.py
 +++ b/pandas/tests/indexing/test_chaining_and_caching.py
-@@ -407,23 +407,6 @@ class TestChaining:
+@@ -422,21 +422,6 @@ class TestChaining:
          str(df)
  
      @pytest.mark.arm_slow
 -    def test_detect_chained_assignment_undefined_column(self, using_copy_on_write):
--
 -        # from SO:
 -        # https://stackoverflow.com/questions/24054495/potential-bug-setting-value-for-undefined-column-using-iloc
 -        df = DataFrame(np.arange(0, 9), columns=["count"])
@@ -251,14 +209,13 @@ Forwarded: no - deletes some tests/examples without replacement
 -        df_original = df.copy()
 -
 -        if using_copy_on_write:
--            # TODO(CoW) can we still warn here?
--            df.iloc[0:5]["group"] = "a"
+-            with tm.raises_chained_assignment_error():
+-                df.iloc[0:5]["group"] = "a"
 -            tm.assert_frame_equal(df, df_original)
 -        else:
 -            with pytest.raises(SettingWithCopyError, match=msg):
 -                df.iloc[0:5]["group"] = "a"
 -
--    @pytest.mark.arm_slow
+     @pytest.mark.arm_slow
      def test_detect_chained_assignment_changing_dtype(
          self, using_array_manager, using_copy_on_write
-     ):

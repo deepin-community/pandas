@@ -3,11 +3,9 @@ Upstream-Name: pandas
 Upstream-Contact: pandas-dev@python.org
 Source: https://github.com/pandas-dev/pandas
 Files-Excluded: doc/source/user_guide/cookbook.rst
-                .circleci
-                .github
                 .gitignore
                 .gitattributes
-Comment: cookbook has around 100 Stack Overflow snippets (CC-BY-SA with possibly inadequate attribution), the Google pandas/io/auth.py referred to in LICENSES/OTHER was removed in upstream commit 1bad601
+Comment: cookbook has around 100 Stack Overflow snippets (CC-BY-SA with possibly inadequate attribution), the other omissions are for non-copyright potential breakage
 
 Files: *
 Copyright: 2008-2023 AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
@@ -20,18 +18,22 @@ Copyright: 2001-2017 Enthought, Inc. and SciPy Developers.
 License: BSD-3
 Comment: it is possible that other code was also taken from Scipy
 
-Files: pandas/_libs/src/headers/portable.h
+Files: pandas/_libs/include/pandas/portable.h
 Copyright: 2005-2014 Rich Felker and contributors
            2008-2019, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team
 License: Expat and BSD-3
 Origin: musl (partly)
 Comment: this might or might not be from a public domain part of musl
 
-Files: pandas/_libs/src/klib/*
-Copyright: 2008, 2009, 2011 by Attractive Chaos <attractor@live.co.uk>
-License: Expat
+Files: pandas/_libs/include/pandas/skiplist.h
+Copyright: 2009, Raymond Hettinger
+           2011-2020 Wes McKinney and PyData Development Team
+License: Expat and BSD-3
+Origin: http://code.activestate.com/recipes/576930/
+Comment: it is a Cython code "inspired" by the original Python code by Raymond
 
-Files: pandas/_libs/src/parser/tokenizer.*
+Files: pandas/_libs/include/pandas/parser/tokenizer.h
+       pandas/_libs/src/parser/tokenizer.c
 Copyright: 2002 Michael Ringgaard
            2011-2012 Warren Weckesser
            2001-2012 Python Software Foundation and Python contributors
@@ -39,14 +41,12 @@ Copyright: 2002 Michael Ringgaard
 License: Python and BSD-3
 Origin: csv (Python standard library), github.com/WarrenWeckesser/textreader
 
-Files: pandas/_libs/src/skiplist.h
-Copyright: 2009, Raymond Hettinger
-           2011-2020 Wes McKinney and PyData Development Team
-License: Expat and BSD-3
-Origin: http://code.activestate.com/recipes/576930/
-Comment: it is a Cython code "inspired" by the original Python code by Raymond
+Files: pandas/_libs/include/pandas/vendored/klib/*
+Copyright: 2008, 2009, 2011 by Attractive Chaos <attractor@live.co.uk>
+License: Expat
 
-Files: pandas/_libs/src/ujson/*
+Files: pandas/_libs/include/pandas/vendored/ujson/*
+       pandas/_libs/src/vendored/ujson/*
 Copyright: 1988-1993 The Regents of the University of California
            1994 Sun Microsystems, Inc.
            2007 Nick Galbreath
@@ -65,7 +65,8 @@ Copyright: 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
 License: BSD-3
 Origin: dateutil (partly)
 
-Files: pandas/_libs/tslibs/src/datetime/*
+Files: pandas/_libs/include/pandas/vendored/numpy/*
+       pandas/_libs/src/vendored/numpy/*
 Copyright: 2005-2013, NumPy Developers
 License: BSD-3
 Origin: numpy

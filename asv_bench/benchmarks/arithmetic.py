@@ -106,6 +106,10 @@ class MixedFrameWithSeriesAxis:
     def time_frame_op_with_series_axis1(self, opname):
         getattr(operator, opname)(self.df, self.ser)
 
+    # exclude comparisons from the params for time_frame_op_with_series_axis1
+    #  since they do not do alignment so raise
+    time_frame_op_with_series_axis1.params = [params[0][6:]]
+
 
 class FrameWithFrameWide:
     # Many-columns, mixed dtypes
@@ -169,7 +173,6 @@ class FrameWithFrameWide:
 
 
 class Ops:
-
     params = [[True, False], ["default", 1]]
     param_names = ["use_numexpr", "threads"]
 
@@ -253,7 +256,6 @@ class Ops2:
 
 
 class Timeseries:
-
     params = [None, "US/Eastern"]
     param_names = ["tz"]
 
@@ -264,9 +266,13 @@ class Timeseries:
         self.ts = self.s[halfway]
 
         self.s2 = Series(date_range("20010101", periods=N, freq="s", tz=tz))
+        self.ts_different_reso = Timestamp("2001-01-02", tz=tz)
 
     def time_series_timestamp_compare(self, tz):
         self.s <= self.ts
+
+    def time_series_timestamp_different_reso_compare(self, tz):
+        self.s <= self.ts_different_reso
 
     def time_timestamp_series_compare(self, tz):
         self.ts >= self.s
@@ -312,7 +318,6 @@ class CategoricalComparisons:
 
 
 class IndexArithmetic:
-
     params = ["float", "int"]
     param_names = ["dtype"]
 
@@ -383,7 +388,6 @@ class DateInferOps:
 
 
 class AddOverflowScalar:
-
     params = [1, -1, 0]
     param_names = ["scalar"]
 
@@ -451,7 +455,6 @@ offsets = non_apply + other_offsets
 
 
 class OffsetArrayArithmetic:
-
     params = offsets
     param_names = ["offset"]
 

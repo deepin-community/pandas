@@ -15,7 +15,6 @@ for imp in ["pandas.util", "pandas.tools.hashing"]:
 
 
 class Factorize:
-
     params = [
         [True, False],
         [True, False],
@@ -24,6 +23,7 @@ class Factorize:
             "uint",
             "float",
             "object",
+            "object_str",
             "datetime64[ns]",
             "datetime64[ns, tz]",
             "Int64",
@@ -47,7 +47,8 @@ class Factorize:
             "int": pd.Index(np.arange(N), dtype="int64"),
             "uint": pd.Index(np.arange(N), dtype="uint64"),
             "float": pd.Index(np.random.randn(N), dtype="float64"),
-            "object": string_index,
+            "object_str": string_index,
+            "object": pd.Index(np.arange(N), dtype="object"),
             "datetime64[ns]": pd.date_range("2011-01-01", freq="H", periods=N),
             "datetime64[ns, tz]": pd.date_range(
                 "2011-01-01", freq="H", periods=N, tz="Asia/Tokyo"
@@ -63,9 +64,11 @@ class Factorize:
     def time_factorize(self, unique, sort, dtype):
         pd.factorize(self.data, sort=sort)
 
+    def peakmem_factorize(self, unique, sort, dtype):
+        pd.factorize(self.data, sort=sort)
+
 
 class Duplicated:
-
     params = [
         [True, False],
         ["first", "last", False],
@@ -93,6 +96,28 @@ class Duplicated:
 
     def time_duplicated(self, unique, keep, dtype):
         self.idx.duplicated(keep=keep)
+
+
+class DuplicatedMaskedArray:
+    params = [
+        [True, False],
+        ["first", "last", False],
+        ["Int64", "Float64"],
+    ]
+    param_names = ["unique", "keep", "dtype"]
+
+    def setup(self, unique, keep, dtype):
+        N = 10**5
+        data = pd.Series(np.arange(N), dtype=dtype)
+        data[list(range(1, N, 100))] = pd.NA
+        if not unique:
+            data = data.repeat(5)
+        self.ser = data
+        # cache is_unique
+        self.ser.is_unique
+
+    def time_duplicated(self, unique, keep, dtype):
+        self.ser.duplicated(keep=keep)
 
 
 class Hashing:
