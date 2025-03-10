@@ -38,7 +38,7 @@ export HOME=$(CURDIR)/buildtmp
 # The echo-random-characters is to allow searching for fails that don't show the usual test failure message i.e. crashes/errors
 # -v makes the log too long for salsa-ci
 # the grep -q is because trying to test __pycache__ is an error in pytest 8+, #1063959
-export PYBUILD_TEST_ARGS=TEST_SUCCESS=true; cd {build_dir} ; for TEST_SUBSET in {build_dir}/pandas/tests/* ; do echo $$TEST_SUBSET | grep -q -e __pycache__ || PANDAS_CI=1 LC_ALL=C.UTF-8 xvfb-run -a -s "-screen 0 1280x1024x24 -noreset" {interpreter} -m pytest -s -m "$(PYTEST_MARKER)" $(PYTEST_WARN_IGNORE) -k "not test_register_entrypoint and not test_wrong_url and not test_statsmodels" --confcutdir={build_dir}/pandas --deb-data-root-dir={dir}/pandas/tests $$TEST_SUBSET || test $$? = 5 || TEST_SUCCESS=false && echo "rdjoqkol test state = $$TEST_SUCCESS"; done ; rm -rf test-data.xml .pytest_cache ; $$TEST_SUCCESS
+export PYBUILD_TEST_ARGS=TEST_SUCCESS=true; cd {build_dir} ; for TEST_SUBSET in {build_dir}/pandas/tests/* ; do echo $$TEST_SUBSET | grep -q -e __pycache__ || PANDAS_CI=1 LC_ALL=C.UTF-8 xvfb-run -a -s "-screen 0 1280x1024x24 -noreset" {interpreter} -m pytest -s -m "$(PYTEST_MARKER)" $(PYTEST_WARN_IGNORE) -k "not test_register_entrypoint and not test_wrong_url and not test_statsmodels" --confcutdir={build_dir}/pandas --deb-data-root-dir={dir}/pandas/tests $$TEST_SUBSET || test $$? = 5 || TEST_SUCCESS=false && echo "rdjoqkol test state = $$TEST_SUCCESS"; done ; rm -rf test-data.xml test_stata.dta .pytest_cache ; $$TEST_SUCCESS
 
 export PYBUILD_EXT_DESTDIR=debian/python3-pandas-lib
 export PYBUILD_DESTDIR=debian/python3-pandas

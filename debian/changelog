@@ -1,3 +1,106 @@
+pandas (2.2.3+dfsg-8) unstable; urgency=medium
+
+  * Re-add full build dependencies.
+  * Allow building on ports without PyQt5.
+  * README.source: document circular dependencies.
+  * Ignore some more failing tests (workaround for #1088988).
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sat, 01 Feb 2025 18:39:17 +0000
+
+pandas (2.2.3+dfsg-7) unstable; urgency=medium
+
+  * Re-add some but not all build-deps, stop ignoring most tests
+    and documentation fails (but still ignore #1094417).
+  * Temporarily move matplotlib to Build-Depends-Indep.
+  * Tests: remove no longer needed xfails.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Tue, 28 Jan 2025 22:18:06 +0000
+
+pandas (2.2.3+dfsg-6) unstable; urgency=medium
+
+  * Tests: accept recent improvements in xarray and pyreadstat,
+    avoid crash when creating reference.
+  * Docs privacy: use local file for logo.
+  * Temporarily ignore tests and documentation fails and drop some
+    build-deps to unblock numpy2 transition
+    (workaround for #1088988, #1094385).
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Tue, 28 Jan 2025 07:22:40 +0000
+
+pandas (2.2.3+dfsg-5) unstable; urgency=medium
+
+  * Docs: switch back to pydata-sphinx-theme.
+  * Docs: (re-)add build-dependencies we now can satisfy.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Mon, 21 Oct 2024 19:43:11 +0100
+
+pandas (2.2.3+dfsg-4) unstable; urgency=medium
+
+  * Re-enable docs using a different theme (workaround for #1084781).
+  * Re-add dropped build-depends.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Fri, 11 Oct 2024 10:18:43 +0100
+
+pandas (2.2.3+dfsg-3) unstable; urgency=medium
+
+  * Ignore docs build fail (workaround for #1084781) and print log.
+  * Docs: remove old pydata-sphinx-theme workarounds.
+  * Temporarily drop some build-depends to break bootstrap cycle.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Tue, 08 Oct 2024 22:14:45 +0100
+
+pandas (2.2.3+dfsg-2) unstable; urgency=medium
+
+  * Move pyreadstat to Build-Depends-Indep to break cycle.
+  * Allow building on ports without full test-Depends.
+  * Re-enable sqlalchemy tests.
+  * Stop using pkg_resources. (Closes: #1083523)
+  * Tests: stop passing non-constant pytz.timezone
+    directly to datetime.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 06 Oct 2024 16:40:59 +0100
+
+pandas (2.2.3+dfsg-1) unstable; urgency=medium
+
+  * New upstream release. (Closes: #1082096)
+  * Update contributors, refresh patches.
+  * Tests: keep 32-bit intervaltree xfailed.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sat, 21 Sep 2024 17:21:40 +0100
+
+pandas (2.2.2+dfsg-4) unstable; urgency=medium
+
+  * Tests: re-enable bottleneck and tabulate (see #1070359, #1070360),
+    make blosc xfail nonstrict, use pyproject.toml in autopkgtest,
+    run autopkgtest in CI, be less verbose to fit in the CI log.
+  * Add transition Breaks.
+  * Upload to unstable. (Closes: #1069792)
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 07 Jul 2024 19:36:37 +0100
+
+pandas (2.2.2+dfsg-3) experimental; urgency=medium
+
+  * Tests: add forgotten import.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Mon, 06 May 2024 14:47:52 +0100
+
+pandas (2.2.2+dfsg-2) experimental; urgency=medium
+
+  * Allow importing pandas._testing without pytest.
+  * Tests: don't require 32-bit to imply time32.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Mon, 06 May 2024 11:29:54 +0100
+
+pandas (2.2.2+dfsg-1) experimental; urgency=medium
+
+  * New upstream release.  Update copyright, patches, depends.
+  * Upload to experimental, due to potential breakage (see #1069792).
+  * Tests: use our test data path, skip too-old dependencies,
+    mark some tests as requiring optional dependencies,
+    remove no longer needed patches, clean up afterwards.
+
+ -- Rebecca N. Palmer <rebecca_palmer@zoho.com>  Sun, 05 May 2024 14:40:45 +0100
+
 pandas (2.1.4+dfsg-8) unstable; urgency=medium
 
   * Re-enable the documentation.

@@ -8,7 +8,7 @@ Forwarded: no
 
 --- a/pandas/tests/groupby/conftest.py
 +++ b/pandas/tests/groupby/conftest.py
-@@ -7,6 +7,11 @@ from pandas.core.groupby.base import (
+@@ -11,6 +11,11 @@ from pandas.core.groupby.base import (
      reduction_kernels,
      transformation_kernels,
  )
@@ -20,7 +20,7 @@ Forwarded: no
  
  
  @pytest.fixture(params=[True, False])
-@@ -169,7 +174,22 @@ def groupby_func(request):
+@@ -153,7 +158,22 @@ def groupby_func(request):
      return request.param
  
  
@@ -85,12 +85,11 @@ Forwarded: no
      return request.param
 --- a/pandas/tests/window/test_numba.py
 +++ b/pandas/tests/window/test_numba.py
-@@ -5,7 +5,13 @@ from pandas.compat import (
-     is_ci_environment,
-     is_platform_mac,
-     is_platform_windows,
-+    IS64,
- )
+@@ -1,6 +1,12 @@
+ import numpy as np
+ import pytest
+ 
++from pandas.compat import IS64
 +try:
 +    from numba.core.errors import UnsupportedParforsError, TypingError
 +except ImportError:  # numba not installed
@@ -99,7 +98,7 @@ Forwarded: no
  from pandas.errors import NumbaUtilError
  import pandas.util._test_decorators as td
  
-@@ -199,6 +205,12 @@ class TestEngine:
+@@ -186,6 +192,12 @@ class TestEngine:
          expected = DataFrame({"value": [2.0, 2.0, 2.0]})
          tm.assert_frame_equal(result, expected)
  
@@ -112,7 +111,7 @@ Forwarded: no
      def test_dont_cache_engine_kwargs(self):
          # If the user passes a different set of engine_kwargs don't return the same
          # jitted function
-@@ -339,6 +351,12 @@ class TestTableMethod:
+@@ -326,6 +338,12 @@ class TestTableMethod:
                  f, engine="numba", raw=True
              )
  
@@ -125,7 +124,7 @@ Forwarded: no
      def test_table_method_rolling_methods(
          self,
          axis,
-@@ -421,6 +439,12 @@ class TestTableMethod:
+@@ -408,6 +426,12 @@ class TestTableMethod:
          )
          tm.assert_frame_equal(result, expected)
  

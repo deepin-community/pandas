@@ -62,6 +62,8 @@ of multi-axis indexing.
     * A boolean array (any ``NA`` values will be treated as ``False``).
     * A ``callable`` function with one argument (the calling Series or DataFrame) and
       that returns valid output for indexing (one of the above).
+    * A tuple of row (and column) indices whose elements are one of the
+      above inputs.
 
   See more at :ref:`Selection by Label <indexing.label>`.
 
@@ -78,6 +80,8 @@ of multi-axis indexing.
     * A boolean array (any ``NA`` values will be treated as ``False``).
     * A ``callable`` function with one argument (the calling Series or DataFrame) and
       that returns valid output for indexing (one of the above).
+    * A tuple of row (and column) indices whose elements are one of the
+      above inputs.
 
   See more at :ref:`Selection by Position <indexing.integer>`,
   :ref:`Advanced Indexing <advanced>` and :ref:`Advanced
@@ -85,19 +89,26 @@ of multi-axis indexing.
 
 * ``.loc``, ``.iloc``, and also ``[]`` indexing can accept a ``callable`` as indexer. See more at :ref:`Selection By Callable <indexing.callable>`.
 
+  .. note::
+
+     Destructuring tuple keys into row (and column) indexes occurs
+     *before* callables are applied, so you cannot return a tuple from
+     a callable to index both rows and columns.
+
 Getting values from an object with multi-axes selection uses the following
 notation (using ``.loc`` as an example, but the following applies to ``.iloc`` as
 well). Any of the axes accessors may be the null slice ``:``. Axes left out of
 the specification are assumed to be ``:``, e.g. ``p.loc['a']`` is equivalent to
 ``p.loc['a', :]``.
 
-.. csv-table::
-    :header: "Object Type", "Indexers"
-    :widths: 30, 50
-    :delim: ;
 
-    Series; ``s.loc[indexer]``
-    DataFrame; ``df.loc[row_indexer,column_indexer]``
+.. ipython:: python
+
+   ser = pd.Series(range(5), index=list("abcde"))
+   ser.loc[["a", "c", "e"]]
+
+   df = pd.DataFrame(np.arange(25).reshape(5, 5), index=list("abcde"), columns=list("abcde"))
+   df.loc[["a", "c", "e"], ["b", "d"]]
 
 .. _indexing.basics:
 
@@ -113,10 +124,9 @@ indexing pandas objects with ``[]``:
 .. csv-table::
     :header: "Object Type", "Selection", "Return Value Type"
     :widths: 30, 30, 60
-    :delim: ;
 
-    Series; ``series[label]``; scalar value
-    DataFrame; ``frame[colname]``; ``Series`` corresponding to colname
+    Series, ``series[label]``, scalar value
+    DataFrame, ``frame[colname]``, ``Series`` corresponding to colname
 
 Here we construct a simple time series data set to use for illustrating the
 indexing functionality:
@@ -450,6 +460,8 @@ The ``.iloc`` attribute is the primary access method. The following are valid in
 * A slice object with ints ``1:7``.
 * A boolean array.
 * A ``callable``, see :ref:`Selection By Callable <indexing.callable>`.
+* A tuple of row (and column) indexes, whose elements are one of the
+  above types.
 
 .. ipython:: python
 
@@ -552,6 +564,12 @@ Selection by callable
 
 ``.loc``, ``.iloc``, and also ``[]`` indexing can accept a ``callable`` as indexer.
 The ``callable`` must be a function with one argument (the calling Series or DataFrame) that returns valid output for indexing.
+
+.. note::
+
+   For ``.iloc`` indexing, returning a tuple from the callable is
+   not supported, since tuple destructuring for row and column indexes
+   occurs *before* applying callables.
 
 .. ipython:: python
 
@@ -1709,6 +1727,22 @@ You can assign a custom index to the ``index`` attribute:
 Returning a view versus a copy
 ------------------------------
 
+.. warning::
+
+    :ref:`Copy-on-Write <copy_on_write>`
+    will become the new default in pandas 3.0. This means that chained indexing will
+    never work. As a consequence, the ``SettingWithCopyWarning`` won't be necessary
+    anymore.
+    See :ref:`this section <copy_on_write_chained_assignment>`
+    for more context.
+    We recommend turning Copy-on-Write on to leverage the improvements with
+
+    ```
+    pd.options.mode.copy_on_write = True
+    ```
+
+    even before pandas 3.0 is available.
+
 When setting values in a pandas object, care must be taken to avoid what is called
 ``chained indexing``. Here is an example.
 
@@ -1746,6 +1780,22 @@ faster, and allows one to index *both* axes if so desired.
 
 Why does assignment fail when using chained indexing?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+    :ref:`Copy-on-Write <copy_on_write>`
+    will become the new default in pandas 3.0. This means than chained indexing will
+    never work. As a consequence, the ``SettingWithCopyWarning`` won't be necessary
+    anymore.
+    See :ref:`this section <copy_on_write_chained_assignment>`
+    for more context.
+    We recommend turning Copy-on-Write on to leverage the improvements with
+
+    ```
+    pd.options.mode.copy_on_write = True
+    ```
+
+    even before pandas 3.0 is available.
 
 The problem in the previous section is just a performance issue. What's up with
 the ``SettingWithCopy`` warning? We don't **usually** throw warnings around when
@@ -1803,6 +1853,22 @@ Yikes!
 Evaluation order matters
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. warning::
+
+    :ref:`Copy-on-Write <copy_on_write>`
+    will become the new default in pandas 3.0. This means than chained indexing will
+    never work. As a consequence, the ``SettingWithCopyWarning`` won't be necessary
+    anymore.
+    See :ref:`this section <copy_on_write_chained_assignment>`
+    for more context.
+    We recommend turning Copy-on-Write on to leverage the improvements with
+
+    ```
+    pd.options.mode.copy_on_write = True
+    ```
+
+    even before pandas 3.0 is available.
+
 When you use chained indexing, the order and type of the indexing operation
 partially determine whether the result is a slice into the original object, or
 a copy of the slice.
@@ -1837,7 +1903,7 @@ This however is operating on a copy and will not work.
    :okwarning:
    :okexcept:
 
-   with option_context('mode.chained_assignment','warn'):
+   with pd.option_context('mode.chained_assignment','warn'):
        dfb[dfb['a'].str.startswith('o')]['c'] = 42
 
 A chained assignment can also crop up in setting in a mixed dtype frame.
@@ -1879,7 +1945,7 @@ Last, the subsequent example will **not** work at all, and so should be avoided:
    :okwarning:
    :okexcept:
 
-   with option_context('mode.chained_assignment','raise'):
+   with pd.option_context('mode.chained_assignment','raise'):
        dfd.loc[0]['a'] = 1111
 
 .. warning::

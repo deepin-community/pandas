@@ -43,7 +43,7 @@ Forwarded: no - deletes some tests/examples without replacement
 -    cookbook
 --- a/pandas/io/sql.py
 +++ b/pandas/io/sql.py
-@@ -2053,14 +2053,14 @@ def _get_valid_sqlite_name(name: object)
+@@ -2465,14 +2465,14 @@ def _get_valid_sqlite_name(name: object)
      # Replace all " with "".
      # Wrap the entire thing in double quotes.
  
@@ -65,7 +65,7 @@ Forwarded: no - deletes some tests/examples without replacement
  class SQLiteTable(SQLTable):
 --- a/pandas/tests/groupby/test_categorical.py
 +++ b/pandas/tests/groupby/test_categorical.py
-@@ -980,28 +980,6 @@ def test_groupby_empty_with_category():
+@@ -988,28 +988,6 @@ def test_groupby_empty_with_category():
      tm.assert_series_equal(result, expected)
  
  
@@ -94,9 +94,47 @@ Forwarded: no - deletes some tests/examples without replacement
  @pytest.mark.parametrize("ordered", [True, False])
  def test_sort2(sort, ordered):
      # dataframe groupby sort was being ignored # GH 8868
+--- a/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
++++ b/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
+@@ -13,35 +13,6 @@ from pandas import (
+ import pandas._testing as tm
+ 
+ 
+-def test_detect_chained_assignment(using_copy_on_write, warn_copy_on_write):
+-    # Inplace ops, originally from:
+-    # https://stackoverflow.com/questions/20508968/series-fillna-in-a-multiindex-dataframe-does-not-fill-is-this-a-bug
+-    a = [12, 23]
+-    b = [123, None]
+-    c = [1234, 2345]
+-    d = [12345, 23456]
+-    tuples = [("eyes", "left"), ("eyes", "right"), ("ears", "left"), ("ears", "right")]
+-    events = {
+-        ("eyes", "left"): a,
+-        ("eyes", "right"): b,
+-        ("ears", "left"): c,
+-        ("ears", "right"): d,
+-    }
+-    multiind = MultiIndex.from_tuples(tuples, names=["part", "side"])
+-    zed = DataFrame(events, index=["a", "b"], columns=multiind)
+-
+-    if using_copy_on_write:
+-        with tm.raises_chained_assignment_error():
+-            zed["eyes"]["right"].fillna(value=555, inplace=True)
+-    elif warn_copy_on_write:
+-        with tm.assert_produces_warning(None):
+-            zed["eyes"]["right"].fillna(value=555, inplace=True)
+-    else:
+-        msg = "A value is trying to be set on a copy of a slice from a DataFrame"
+-        with pytest.raises(SettingWithCopyError, match=msg):
+-            with tm.assert_produces_warning(None):
+-                zed["eyes"]["right"].fillna(value=555, inplace=True)
+-
+ 
+ @td.skip_array_manager_invalid_test  # with ArrayManager df.loc[0] is not a view
+ def test_cache_updating(using_copy_on_write, warn_copy_on_write):
 --- a/pandas/tests/indexing/multiindex/test_setitem.py
 +++ b/pandas/tests/indexing/multiindex/test_setitem.py
-@@ -155,36 +155,6 @@ class TestMultiIndexSetItem:
+@@ -154,36 +154,7 @@ class TestMultiIndexSetItem:
          with pytest.raises(TypeError, match=msg):
              df.loc["bar"] *= 2
  
@@ -118,9 +156,9 @@ Forwarded: no - deletes some tests/examples without replacement
 -        df_orig.index = MultiIndex.from_tuples(
 -            df_orig.index, names=["Sit", "Com", "Type"]
 -        )
--
+ 
 -        expected = df_orig.copy()
--        expected.iloc[[0, 2, 3]] *= 2
+-        expected.iloc[[0, 1, 3]] *= 2
 -
 -        idx = pd.IndexSlice
 -        df = df_orig.copy()
@@ -133,75 +171,16 @@ Forwarded: no - deletes some tests/examples without replacement
  
      def test_multiindex_assignment(self):
          # GH3777 part 2
---- a/pandas/tests/io/parser/common/test_common_basic.py
-+++ b/pandas/tests/io/parser/common/test_common_basic.py
-@@ -349,24 +349,6 @@ def test_trailing_delimiters(all_parsers
-     tm.assert_frame_equal(result, expected)
- 
- 
--def test_escapechar(all_parsers):
--    # https://stackoverflow.com/questions/13824840/feature-request-for-
--    # pandas-read-csv
--    data = '''SEARCH_TERM,ACTUAL_URL
--"bra tv board","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
--"tv p\xc3\xa5 hjul","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
--"SLAGBORD, \\"Bergslagen\\", IKEA:s 1700-tals series","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"'''  # noqa: E501
--
--    parser = all_parsers
--    result = parser.read_csv(
--        StringIO(data), escapechar="\\", quotechar='"', encoding="utf-8"
--    )
--
--    assert result["SEARCH_TERM"][2] == 'SLAGBORD, "Bergslagen", IKEA:s 1700-tals series'
--
--    tm.assert_index_equal(result.columns, Index(["SEARCH_TERM", "ACTUAL_URL"]))
--
--
- @xfail_pyarrow
- def test_ignore_leading_whitespace(all_parsers):
-     # see gh-3374, gh-6607
---- a/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
-+++ b/pandas/tests/indexing/multiindex/test_chaining_and_caching.py
-@@ -12,32 +12,6 @@ from pandas import (
- import pandas._testing as tm
- 
- 
--def test_detect_chained_assignment(using_copy_on_write):
--    # Inplace ops, originally from:
--    # https://stackoverflow.com/questions/20508968/series-fillna-in-a-multiindex-dataframe-does-not-fill-is-this-a-bug
--    a = [12, 23]
--    b = [123, None]
--    c = [1234, 2345]
--    d = [12345, 23456]
--    tuples = [("eyes", "left"), ("eyes", "right"), ("ears", "left"), ("ears", "right")]
--    events = {
--        ("eyes", "left"): a,
--        ("eyes", "right"): b,
--        ("ears", "left"): c,
--        ("ears", "right"): d,
--    }
--    multiind = MultiIndex.from_tuples(tuples, names=["part", "side"])
--    zed = DataFrame(events, index=["a", "b"], columns=multiind)
--
--    if using_copy_on_write:
--        with tm.raises_chained_assignment_error():
--            zed["eyes"]["right"].fillna(value=555, inplace=True)
--    else:
--        msg = "A value is trying to be set on a copy of a slice from a DataFrame"
--        with pytest.raises(SettingWithCopyError, match=msg):
--            zed["eyes"]["right"].fillna(value=555, inplace=True)
--
--
- @td.skip_array_manager_invalid_test  # with ArrayManager df.loc[0] is not a view
- def test_cache_updating(using_copy_on_write):
-     # 5216
 --- a/pandas/tests/indexing/test_chaining_and_caching.py
 +++ b/pandas/tests/indexing/test_chaining_and_caching.py
-@@ -422,21 +422,6 @@ class TestChaining:
+@@ -429,27 +429,6 @@ class TestChaining:
+         df["column1"] = df["column1"] + "c"
          str(df)
  
-     @pytest.mark.arm_slow
--    def test_detect_chained_assignment_undefined_column(self, using_copy_on_write):
+-    @pytest.mark.arm_slow
+-    def test_detect_chained_assignment_undefined_column(
+-        self, using_copy_on_write, warn_copy_on_write
+-    ):
 -        # from SO:
 -        # https://stackoverflow.com/questions/24054495/potential-bug-setting-value-for-undefined-column-using-iloc
 -        df = DataFrame(np.arange(0, 9), columns=["count"])
@@ -212,10 +191,39 @@ Forwarded: no - deletes some tests/examples without replacement
 -            with tm.raises_chained_assignment_error():
 -                df.iloc[0:5]["group"] = "a"
 -            tm.assert_frame_equal(df, df_original)
+-        elif warn_copy_on_write:
+-            with tm.raises_chained_assignment_error():
+-                df.iloc[0:5]["group"] = "a"
 -        else:
 -            with pytest.raises(SettingWithCopyError, match=msg):
--                df.iloc[0:5]["group"] = "a"
--
+-                with tm.raises_chained_assignment_error():
+-                    df.iloc[0:5]["group"] = "a"
+ 
      @pytest.mark.arm_slow
      def test_detect_chained_assignment_changing_dtype(
-         self, using_array_manager, using_copy_on_write
+--- a/pandas/tests/io/parser/common/test_common_basic.py
++++ b/pandas/tests/io/parser/common/test_common_basic.py
+@@ -381,23 +381,6 @@ def test_trailing_delimiters(all_parsers
+     tm.assert_frame_equal(result, expected)
+ 
+ 
+-def test_escapechar(all_parsers):
+-    # https://stackoverflow.com/questions/13824840/feature-request-for-
+-    # pandas-read-csv
+-    data = '''SEARCH_TERM,ACTUAL_URL
+-"bra tv board","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
+-"tv p\xc3\xa5 hjul","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"
+-"SLAGBORD, \\"Bergslagen\\", IKEA:s 1700-tals series","http://www.ikea.com/se/sv/catalog/categories/departments/living_room/10475/?se%7cps%7cnonbranded%7cvardagsrum%7cgoogle%7ctv_bord"'''
+-
+-    parser = all_parsers
+-    result = parser.read_csv(
+-        StringIO(data), escapechar="\\", quotechar='"', encoding="utf-8"
+-    )
+-
+-    assert result["SEARCH_TERM"][2] == 'SLAGBORD, "Bergslagen", IKEA:s 1700-tals series'
+-
+-    tm.assert_index_equal(result.columns, Index(["SEARCH_TERM", "ACTUAL_URL"]))
+-
+ 
+ def test_ignore_leading_whitespace(all_parsers):
+     # see gh-3374, gh-6607

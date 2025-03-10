@@ -432,7 +432,7 @@ In a future version, these will raise an error and you should cast to a common d
 
   In [3]: ser[0] = 'not an int64'
   FutureWarning:
-    Setting an item of incompatible dtype is deprecated and will raise in a future error of pandas.
+    Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas.
     Value 'not an int64' has dtype incompatible with int64, please explicitly cast to a compatible dtype first.
 
   In [4]: ser
@@ -789,6 +789,7 @@ Plotting
 Groupby/resample/rolling
 ^^^^^^^^^^^^^^^^^^^^^^^^
 - Bug in :meth:`.DataFrameGroupBy.idxmin`, :meth:`.SeriesGroupBy.idxmin`, :meth:`.DataFrameGroupBy.idxmax`, :meth:`.SeriesGroupBy.idxmax` returns wrong dtype when used on an empty DataFrameGroupBy or SeriesGroupBy (:issue:`51423`)
+- Bug in :meth:`DataFrame.groupby.rank` on nullable datatypes when passing ``na_option="bottom"`` or ``na_option="top"`` (:issue:`54206`)
 - Bug in :meth:`DataFrame.resample` and :meth:`Series.resample` in incorrectly allowing non-fixed ``freq`` when resampling on a :class:`TimedeltaIndex` (:issue:`51896`)
 - Bug in :meth:`DataFrame.resample` and :meth:`Series.resample` losing time zone when resampling empty data (:issue:`53664`)
 - Bug in :meth:`DataFrame.resample` and :meth:`Series.resample` where ``origin`` has no effect in resample when values are outside of axis  (:issue:`53662`)
