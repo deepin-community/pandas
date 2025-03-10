@@ -20,5 +20,5 @@ Forwarded: no
 -        self._clean_trees.append(d for d in ("build", "dist") if os.path.exists(d))
 +        self._clean_trees.extend([d for d in ("build", "dist") if os.path.exists(d)])
  
-     def finalize_options(self):
+     def finalize_options(self) -> None:
          pass

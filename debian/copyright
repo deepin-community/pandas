@@ -5,29 +5,29 @@ Source: https://github.com/pandas-dev/pandas
 Files-Excluded: doc/source/user_guide/cookbook.rst
                 .gitignore
                 .gitattributes
-Comment: cookbook has around 100 Stack Overflow snippets (CC-BY-SA with possibly inadequate attribution), the other omissions are for non-copyright potential breakage
+Comment: cookbook has around 100 Stack Overflow snippets (CC-BY-SA with possibly inadequate attribution), the other omissions are for non-copyright potential breakage; the generic pandas upstream copyright in * is repeated for other files modified by them (without bothering to keep track of exact years) because the format defines the initial * as applying only to files not listed elsewhere
 
 Files: *
-Copyright: 2008-2023 AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
+Copyright: 2008-2024 AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 Comment: Lumped together as notices disagree on which ones are which years.  See contributors_list.txt for a full list of commit authors.  The original source contains some CC-BY-SA snippets by Stack Overflow users (https://stackoverflow.com/users/1114/jeremy-banks, https://stackoverflow.com/users/387251/oliver, https://stackoverflow.com/users/3297752/noah-motion, https://stackoverflow.com/users/925671/bill, https://stackoverflow.com/users/1082349/foobar, https://stackoverflow.com/users/3089209/crantila, https://stackoverflow.com/users/2375855/ojdo, https://stackoverflow.com/users/487339/dsm, https://stackoverflow.com/users/2677943/swenzel), but these may be too small to be copyrightable, and the less trivial ones are patched out in this package
 
 Files: doc/sphinxext/announce.py
 Copyright: 2001-2017 Enthought, Inc. and SciPy Developers.
-           2017-2021 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 Comment: it is possible that other code was also taken from Scipy
 
 Files: pandas/_libs/include/pandas/portable.h
-Copyright: 2005-2014 Rich Felker and contributors
-           2008-2019, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team
+Copyright: 2005-2020 Rich Felker and contributors (see LICENSES/MUSL_LICENSE for list)
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Expat and BSD-3
-Origin: musl (partly)
-Comment: this might or might not be from a public domain part of musl
+Origin: musl src/ctype (partly)
 
 Files: pandas/_libs/include/pandas/skiplist.h
 Copyright: 2009, Raymond Hettinger
-           2011-2020 Wes McKinney and PyData Development Team
+           2016(?) Wes McKinney
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Expat and BSD-3
 Origin: http://code.activestate.com/recipes/576930/
 Comment: it is a Cython code "inspired" by the original Python code by Raymond
@@ -37,7 +37,7 @@ Files: pandas/_libs/include/pandas/parser/tokenizer.h
 Copyright: 2002 Michael Ringgaard
            2011-2012 Warren Weckesser
            2001-2012 Python Software Foundation and Python contributors
-           2012-2022 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Python and BSD-3
 Origin: csv (Python standard library), github.com/WarrenWeckesser/textreader
 
@@ -49,11 +49,12 @@ Files: pandas/_libs/include/pandas/vendored/ujson/*
        pandas/_libs/src/vendored/ujson/*
 Copyright: 1988-1993 The Regents of the University of California
            1994 Sun Microsystems, Inc.
-           2007 Nick Galbreath
+           2005-2007 Nick Galbreath
+           2014 Electronic Arts Inc.
            2011-2013 ESN Social Software AB and Jonas Tarnstrom
-           2012-2022 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3 and Expat
-Origin: ultrajson
+Origin: ultrajson, modp_ascii and TCL
 
 Files: pandas/_libs/tslibs/parsing.pyx
 Copyright: 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
@@ -61,46 +62,48 @@ Copyright: 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
            2014-2016 - Yaron de Leeuw <me@jarondl.net>
            2015-2017 - Paul Ganssle <paul@ganssle.io>
            2015-2017 - dateutil contributors (see AUTHORS file)
-           2008-2022, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 Origin: dateutil (partly)
 
 Files: pandas/_libs/include/pandas/vendored/numpy/*
        pandas/_libs/src/vendored/numpy/*
-Copyright: 2005-2013, NumPy Developers
+Copyright: 2005-?, NumPy Developers
 License: BSD-3
 Origin: numpy
-Comment: Listed as derived from Numpy 1.7
+Comment: the included license says 2005-2023, but this was updated without changing the actual code (https://github.com/pandas-dev/pandas/pull/54743) and the files say derived from Numpy 1.7 (2013)
 
 Files: pandas/_libs/window/aggregations.pyx
        pandas/tests/window/test_rolling.py
-Copyright: 2010-2012 Archipel Asset Management AB
-           2011-2022 Lambda Foundry, Inc. and PyData Development Team
+Copyright: 2010-2019 Keith Goodman
+           2019 Bottleneck Developers
+           2010-2012 Archipel Asset Management AB
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 Origin: bottleneck (partly)
 Comment: Original was BSD-2, but BSD-2 and BSD-3 = BSD-3
 
 Files: pandas/compat/*
 Copyright: 2010-2013 Benjamin Peterson
-           2012-2022 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Expat and BSD-3
 Origin: six
 
 Files: pandas/core/accessor.py
 Copyright: 2014-2018 xarray developers
-           2018-2021 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Apache-2.0 and BSD-3
 Origin: xarray (partly)
 
 Files: pandas/io/clipboard/*
 Copyright: 2010-2017 Albert Sweigart and Pyperclip contributors
-           2016-2022 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 Origin: Pyperclip
 
 Files: pandas/io/sas/sas7bdat.py
-Copyright: 2015 Jared Hobbs
-           2016-2022 Lambda Foundry, Inc. and PyData Development Team
+Copyright: 2015-2019 Jared Hobbs
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 Origin: https://bitbucket.org/jaredhobbs/sas7bdat
 License: Expat
 
@@ -126,19 +129,19 @@ Origin: https://github.com/pypa/packaging/blob/main/packaging/_structures.py
 
 Files: scripts/no_bool_in_generic.py
 Copyright: 2017 Anthony Sottile
-           2021 Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: Expat and BSD-3
 Origin: pyupgrade (partly)
 
 Files: setup.py
 Copyright: 2009-2012, Brian Granger, Min Ragan-Kelley (from pyzmq)
            2004 Infrae (from lxml)
-           2008-2022, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team
+           20xx-20xx AQR Capital Management, LLC, Lambda Foundry, Inc., PyData Development Team, Open source contributors
 License: BSD-3
 
 Files: debian/*
 Copyright: 2011-2018, Yaroslav Halchenko <debian@onerussian.com>
-           2019-2023, Debian Science Team
+           2019-2024, Debian Science Team
 License: BSD-3
 
 License: BSD-2

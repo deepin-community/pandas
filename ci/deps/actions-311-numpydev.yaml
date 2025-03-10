@@ -21,11 +21,12 @@ dependencies:
 
   # pandas dependencies
   - python-dateutil
-  - pytz
+  # pytz 2024.2 timezones cause wrong results
+  - pytz<2024.2
   - pip
 
   - pip:
     - "--extra-index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple"
     - "--pre"
     - "numpy"
-    - "tzdata>=2022.1"
+    - "tzdata>=2022.7"
