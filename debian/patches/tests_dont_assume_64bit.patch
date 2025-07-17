@@ -4,80 +4,9 @@ Author: Rebecca N. Palmer <rebecca_palmer@zoho.com>
 Bug-Debian: partly https://bugs.debian.org/1026351
 Forwarded: no
 
---- a/pandas/core/arrays/_ranges.py
-+++ b/pandas/core/arrays/_ranges.py
-@@ -50,12 +50,12 @@ def generate_regular_range(
-     ndarray[np.int64]
-         Representing the given resolution.
-     """
--    istart = start._value if start is not None else None
--    iend = end._value if end is not None else None
-+    istart = int(start._value) if start is not None else None
-+    iend = int(end._value) if end is not None else None
-     freq.nanos  # raises if non-fixed frequency
-     td = Timedelta(freq)
--    b: int | np.int64 | np.uint64
--    e: int | np.int64 | np.uint64
-+    b: int
-+    e: int
-     try:
-         td = td.as_unit(  # pyright: ignore[reportGeneralTypeIssues]
-             unit, round_ok=False
-@@ -98,7 +98,7 @@ def generate_regular_range(
- 
- def _generate_range_overflow_safe(
-     endpoint: int, periods: int, stride: int, side: str = "start"
--) -> np.int64 | np.uint64:
-+) -> int:
-     """
-     Calculate the second endpoint for passing to np.arange, checking
-     to avoid an integer overflow.  Catch OverflowError and re-raise
-@@ -117,7 +117,7 @@ def _generate_range_overflow_safe(
- 
-     Returns
-     -------
--    other_end : np.int64 | np.uint64
-+    other_end : int
- 
-     Raises
-     ------
-@@ -159,13 +159,13 @@ def _generate_range_overflow_safe(
-     remaining = periods - mid_periods
-     assert 0 < remaining < periods, (remaining, periods, endpoint, stride)
- 
--    midpoint = int(_generate_range_overflow_safe(endpoint, mid_periods, stride, side))
-+    midpoint = _generate_range_overflow_safe(endpoint, mid_periods, stride, side)
-     return _generate_range_overflow_safe(midpoint, remaining, stride, side)
- 
- 
- def _generate_range_overflow_safe_signed(
-     endpoint: int, periods: int, stride: int, side: str
--) -> np.int64 | np.uint64:
-+) -> int:
-     """
-     A special case for _generate_range_overflow_safe where `periods * stride`
-     can be calculated without overflowing int64 bounds.
-@@ -183,7 +183,7 @@ def _generate_range_overflow_safe_signed
-                 # Putting this into a DatetimeArray/TimedeltaArray
-                 #  would incorrectly be interpreted as NaT
-                 raise OverflowError
--            return result
-+            return int(result)
-         except (FloatingPointError, OverflowError):
-             # with endpoint negative and addend positive we risk
-             #  FloatingPointError; with reversed signed we risk OverflowError
-@@ -202,7 +202,7 @@ def _generate_range_overflow_safe_signed
-             i64max = np.uint64(i8max)
-             assert uresult > i64max
-             if uresult <= i64max + np.uint64(stride):
--                return uresult
-+                return int(uresult)
- 
-     raise OutOfBoundsDatetime(
-         f"Cannot generate range with {side}={endpoint} and periods={periods}"
 --- a/pandas/tests/groupby/test_groupby.py
 +++ b/pandas/tests/groupby/test_groupby.py
-@@ -5,6 +5,7 @@ import re
+@@ -6,6 +6,7 @@ import re
  import numpy as np
  import pytest
  
@@ -85,7 +14,7 @@ Forwarded: no
  from pandas.errors import (
      PerformanceWarning,
      SpecificationError,
-@@ -2545,6 +2546,7 @@ def test_groupby_series_with_tuple_name(
+@@ -2618,6 +2619,7 @@ def test_groupby_series_with_tuple_name(
      tm.assert_series_equal(result, expected)
  
  
@@ -93,7 +22,7 @@ Forwarded: no
  @pytest.mark.parametrize(
      "func, values", [("sum", [97.0, 98.0]), ("mean", [24.25, 24.5])]
  )
-@@ -2557,6 +2559,7 @@ def test_groupby_numerical_stability_sum
+@@ -2630,6 +2632,7 @@ def test_groupby_numerical_stability_sum
      tm.assert_frame_equal(result, expected)
  
  
@@ -103,15 +32,15 @@ Forwarded: no
      data = [1e16, 1e16, 97, 98, -5e15, -5e15, -5e15, -5e15]
 --- a/pandas/tests/test_sorting.py
 +++ b/pandas/tests/test_sorting.py
-@@ -8,6 +8,7 @@ import pytest
- from pandas.compat import (
-     is_ci_environment,
-     is_platform_windows,
-+    IS64,
- )
+@@ -4,6 +4,7 @@ from itertools import product
+ 
+ import numpy as np
+ import pytest
++from pandas.compat import IS64
  
  from pandas import (
-@@ -223,6 +224,7 @@ class TestMerge:
+     NA,
+@@ -218,6 +219,7 @@ class TestMerge:
          assert result.name is None
  
      @pytest.mark.slow
@@ -119,7 +48,7 @@ Forwarded: no
      @pytest.mark.parametrize("how", ["left", "right", "outer", "inner"])
      def test_int64_overflow_how_merge(self, left_right, how):
          left, right = left_right
-@@ -233,6 +235,7 @@ class TestMerge:
+@@ -228,6 +230,7 @@ class TestMerge:
          tm.assert_frame_equal(out, merge(left, right, how=how, sort=True))
  
      @pytest.mark.slow
@@ -127,7 +56,7 @@ Forwarded: no
      def test_int64_overflow_sort_false_order(self, left_right):
          left, right = left_right
  
-@@ -244,6 +247,7 @@ class TestMerge:
+@@ -239,6 +242,7 @@ class TestMerge:
          tm.assert_frame_equal(right, out[right.columns.tolist()])
  
      @pytest.mark.slow
@@ -137,7 +66,7 @@ Forwarded: no
      def test_int64_overflow_one_to_many_none_match(self, how, sort):
 --- a/pandas/tests/frame/test_stack_unstack.py
 +++ b/pandas/tests/frame/test_stack_unstack.py
-@@ -21,6 +21,7 @@ from pandas import (
+@@ -20,6 +20,7 @@ from pandas import (
  )
  import pandas._testing as tm
  from pandas.core.reshape import reshape as reshape_lib
@@ -145,7 +74,7 @@ Forwarded: no
  
  
  @pytest.fixture(params=[True, False])
-@@ -2092,6 +2093,7 @@ Thu,Lunch,Yes,51.51,17"""
+@@ -2175,6 +2176,7 @@ class TestStackUnstackMultiLevel:
          tm.assert_frame_equal(recons, df)
  
      @pytest.mark.slow
@@ -155,15 +84,15 @@ Forwarded: no
          # GH 26314: Change ValueError to PerformanceWarning
 --- a/pandas/tests/reshape/test_pivot.py
 +++ b/pandas/tests/reshape/test_pivot.py
-@@ -26,6 +26,7 @@ import pandas._testing as tm
- from pandas.api.types import CategoricalDtype as CDT
+@@ -28,6 +28,7 @@ import pandas._testing as tm
+ from pandas.api.types import CategoricalDtype
  from pandas.core.reshape import reshape as reshape_lib
  from pandas.core.reshape.pivot import pivot_table
 +from pandas.compat import IS64
  
  
  @pytest.fixture(params=[True, False])
-@@ -2059,6 +2060,7 @@ class TestPivotTable:
+@@ -2092,6 +2093,7 @@ class TestPivotTable:
          tm.assert_frame_equal(result, expected)
  
      @pytest.mark.slow
@@ -181,7 +110,7 @@ Forwarded: no
  from pandas.core.arrays import (
      DatetimeArray,
      TimedeltaArray,
-@@ -236,6 +237,11 @@ def test_missing_required_dependency():
+@@ -230,6 +231,11 @@ def test_missing_required_dependency():
          assert name in output
  
  

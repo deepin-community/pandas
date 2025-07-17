@@ -5,7 +5,7 @@ Forwarded: no
 
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -506,6 +506,8 @@ filterwarnings = [
+@@ -521,6 +521,8 @@ filterwarnings = [
    "ignore:distutils Version classes are deprecated:DeprecationWarning:fsspec",
    # Can be removed once https://github.com/numpy/numpy/pull/24794 is merged
    "ignore:.*In the future `np.long` will be defined as.*:FutureWarning",
@@ -16,7 +16,7 @@ Forwarded: no
  markers = [
 --- a/pandas/tests/computation/test_eval.py
 +++ b/pandas/tests/computation/test_eval.py
-@@ -554,11 +554,11 @@ class TestEval:
+@@ -569,11 +569,11 @@ class TestEval:
          assert pd.eval("-1", parser=parser, engine=engine) == -1
          assert pd.eval("+1", parser=parser, engine=engine) == +1
          with tm.assert_produces_warning(

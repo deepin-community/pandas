@@ -11,7 +11,7 @@ Forwarded: no
 
 --- a/pandas/tests/io/pytables/test_append.py
 +++ b/pandas/tests/io/pytables/test_append.py
-@@ -279,7 +279,8 @@ def test_append_all_nans(setup_path):
+@@ -286,7 +286,8 @@ def test_append_all_nans(setup_path):
              tm.assert_frame_equal(store["df2"], df, check_index_type=True)
  
  
@@ -23,7 +23,7 @@ Forwarded: no
          # column oriented
 --- a/pandas/tests/io/pytables/test_select.py
 +++ b/pandas/tests/io/pytables/test_select.py
-@@ -164,6 +164,8 @@ def test_select(setup_path):
+@@ -168,6 +168,8 @@ def test_select(setup_path):
          tm.assert_frame_equal(expected, result)
  
  
@@ -32,17 +32,17 @@ Forwarded: no
  def test_select_dtypes(setup_path):
      with ensure_clean_store(setup_path) as store:
          # with a Timestamp data column (GH #2637)
-@@ -563,6 +565,7 @@ def test_select_iterator_many_empty_fram
+@@ -607,6 +609,7 @@ def test_select_iterator_many_empty_fram
          assert len(results) == 0
  
  
 +@pytest.mark.xfail(condition=PY312, reason="python3.12 https://bugs.debian.org/1055801",raises=TypeError,strict=False)
  def test_frame_select(setup_path):
-     df = tm.makeTimeDataFrame()
- 
+     df = DataFrame(
+         np.random.default_rng(2).standard_normal((10, 4)),
 --- a/pandas/tests/io/pytables/test_store.py
 +++ b/pandas/tests/io/pytables/test_store.py
-@@ -763,7 +763,8 @@ def test_start_stop_fixed(setup_path):
+@@ -884,7 +884,8 @@ def test_start_stop_fixed(setup_path):
          df.iloc[8:10, -2] = np.nan
  
  

@@ -8,7 +8,7 @@ Forwarded: not-needed
 
 --- a/doc/source/conf.py
 +++ b/doc/source/conf.py
-@@ -460,6 +460,7 @@ extlinks = {
+@@ -472,6 +472,7 @@ extlinks = {
  }
  
  
