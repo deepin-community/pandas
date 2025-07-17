@@ -19,9 +19,9 @@ Forwarded: no
  
  from pandas.util._exceptions import find_stack_level
  
-@@ -120,6 +123,8 @@ def import_optional_dependency(
+@@ -123,6 +126,8 @@ def import_optional_dependency(
+         is ``'warn'`` or ``'ignore'``.
      """
- 
      assert errors in {"warn", "raise", "ignore"}
 +    if name=='numba' and warn_numba_platform:
 +        warnings.warn(warn_numba_platform)

@@ -12,4 +12,4 @@ variables:
 # tests are long, so run them only in build
 # shorten the build logs to make room for reporting differences
   SALSA_CI_REPROTEST_ARGS: "--append-build-command=-Pnocheck --vary=environment.variables+=DEB_BUILD_OPTIONS=terse"
-  SALSA_CI_DISABLE_AUTOPKGTEST: 1
+#  SALSA_CI_DISABLE_AUTOPKGTEST: 1

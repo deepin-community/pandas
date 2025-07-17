@@ -20,8 +20,9 @@ dependencies:
   - hypothesis>=6.46.1
 
   # required
-  - numpy<2
+  - numpy
   - python-dateutil
+  # pytz 2024.2 timezones cause wrong results
   - pytz
   - pip:
-    - tzdata>=2022.1
+    - tzdata>=2022.7
